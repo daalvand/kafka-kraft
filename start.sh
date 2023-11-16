@@ -14,7 +14,8 @@ export $(cat .env | sed 's/#.*//g' | xargs)
 if [ -z "$CLUSTER_ID" ]
 then
   # Start a temporary Kafka container to generate a new cluster ID
-  CLUSTER_ID=$(docker-compose run --rm kafka-1 kafka-storage.sh random-uuid)
+  CLUSTER_ID=$(docker compose run --rm kafka1 kafka-storage random-uuid)
+
 
   # Replace the cluster ID in the .env file
   sed -i "s/CLUSTER_ID=/CLUSTER_ID=$CLUSTER_ID/" .env
@@ -26,4 +27,4 @@ else
 fi
 
 # Start the Kafka brokers
-docker-compose up -d
+docker compose up -d
