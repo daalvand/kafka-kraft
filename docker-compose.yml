@@ -1,73 +1,92 @@
-version: "3"
+version: '3'
 services:
-  kafka-1:
-    image: "confluentinc/cp-kafka:7.5.2"
-    hostname: kafka-1
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=kraft:PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
-      - KAFKA_BROKER_ID=1
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9094
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - BITNAMI_DEBUG=yes
-      - KAFKA_KRAFT_CLUSTER_ID=OTMwNzFhYTY1ODNiNGE5OT
-      - KAFKA_CFG_KRAFT_REPLICATION_FACTOR=3
-      - KAFKA_CFG_ADVERTISED_LISTENERS=kraft://:9093,INTERNAL://kafka-1:9092
-      - KAFKA_CFG_LISTENERS=kraft://:9093,CONTROLLER://kafka-1:9094,INTERNAL://:9092
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=3
+  kafka1:
+    image: confluentinc/cp-kafka:7.5.2
+    container_name: kafka-kraft-kafka1
+    hostname: kafka1
     ports:
-      - "9101:9092"
-      - "9102:9093"
-      - "9103:9094"
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'INTERNAL://kafka1:29092,CONTROLLER://kafka1:29093,EXTERNAL://0.0.0.0:9092'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka1:29092,EXTERNAL://localhost:9092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:29093,2@kafka2:29093,3@kafka3:29093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      CLUSTER_ID: ${CLUSTER_ID}
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    networks:
+      - kafka-kraft
 
-  kafka-2:
-    image: "confluentinc/cp-kafka:7.5.2"
-    hostname: kafka-2
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=kraft:PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
-      - KAFKA_BROKER_ID=2
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=2@kafka-2:9094
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - BITNAMI_DEBUG=yes
-      - KAFKA_KRAFT_CLUSTER_ID=OTMwNzFhYTY1ODNiNGE5OT
-      - KAFKA_CFG_KRAFT_REPLICATION_FACTOR=3
-      - KAFKA_CFG_ADVERTISED_LISTENERS=kraft://:9093,INTERNAL://kafka-2:9092
-      - KAFKA_CFG_LISTENERS=kraft://:9093,CONTROLLER://kafka-2:9094,INTERNAL://:9092
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=3
+  kafka2:
+    image: confluentinc/cp-kafka:7.5.2
+    container_name: kafka-kraft-kafka2
+    hostname: kafka2
     ports:
-      - "9095:9092"
-      - "9096:9093"
-      - "9097:9094"
+      - "9093:9093"
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'INTERNAL://kafka2:29092,CONTROLLER://kafka2:29093,EXTERNAL://0.0.0.0:9093'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka2:29092,EXTERNAL://localhost:9093'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:29093,2@kafka2:29093,3@kafka3:29093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      CLUSTER_ID: ${CLUSTER_ID}
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    networks:
+      - kafka-kraft
 
-  kafka-3:
-    image: "confluentinc/cp-kafka:7.5.2"
-    hostname: kafka-3
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=kraft:PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
-      - KAFKA_BROKER_ID=3
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=3@kafka-3:9094
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - BITNAMI_DEBUG=yes
-      - KAFKA_KRAFT_CLUSTER_ID=OTMwNzFhYTY1ODNiNGE5OT
-      - KAFKA_CFG_KRAFT_REPLICATION_FACTOR=3
-      - KAFKA_CFG_ADVERTISED_LISTENERS=kraft://:9093,INTERNAL://kafka-3:9092
-      - KAFKA_CFG_LISTENERS=kraft://:9093,CONTROLLER://kafka-3:9094,INTERNAL://:9092
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=3
+  kafka3:
+    image: confluentinc/cp-kafka:7.5.2
+    container_name: kafka-kraft-kafka3
+    hostname: kafka3
     ports:
-      - "9098:9092"
-      - "9099:9093"
-      - "9100:9094"
+      - "9094:9094"
+    environment:
+      KAFKA_NODE_ID: 3
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_LISTENERS: 'INTERNAL://kafka3:29092,CONTROLLER://kafka3:29093,EXTERNAL://0.0.0.0:9094'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka3:29092,EXTERNAL://localhost:9094'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:29093,2@kafka2:29093,3@kafka3:29093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      CLUSTER_ID: ${CLUSTER_ID}
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    networks:
+      - kafka-kraft
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry
+    container_name: kafka-kraft-schema-registry
+    hostname: schema-registry
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka1:29092,kafka2:29092,kafka3:29092'
+      SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8081'
+    networks:
+      - kafka-kraft
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+
+networks:
+    kafka-kraft:
+      external: true
+      driver: bridge
