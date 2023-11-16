@@ -52,13 +52,13 @@ The primary Docker Compose configuration file for the multi-node Kafka cluster. 
 To initiate the Kafka cluster:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 To halt the Kafka cluster:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ## Creating a Kafka Topic
@@ -66,7 +66,7 @@ docker-compose down
 Ensure Kafka is running. Use the following command to create a Kafka topic named `first_topic` with 4 partitions and a replication factor of 2:
 
 ```bash
-docker-compose exec kafka1 kafka-topics --create  --bootstrap-server kafka1:9092,kafka2:9093,kafka3:9094 --replication-factor 2 --partitions 4 --topic first_topic
+docker compose exec kafka1 kafka-topics --create  --bootstrap-server kafka1:9092,kafka2:9092,kafka3:9092 --replication-factor 2 --partitions 4 --topic first_topic
 ```
 
 ## Producing and Consuming Data
@@ -76,7 +76,7 @@ You can use the `kafka-console-producer` and `kafka-console-consumer` scripts to
 Here's an example command to produce data to the `first_topic` topic:
 
 ```bash
-docker-compose exec kafka1 kafka-console-producer --bootstrap-server kafka1:9092,kafka2:9093,kafka3:9094 --topic first_topic
+docker compose exec kafka1 kafka-console-producer --bootstrap-server kafka1:9092,kafka2:9092,kafka3:9092 --topic first_topic
 ```
 
 You can then type your messages into the console, and they will be sent to the `first_topic` topic.
@@ -84,7 +84,7 @@ You can then type your messages into the console, and they will be sent to the `
 Here's an example command to consume data from the `first_topic` topic:
 
 ```bash
-docker-compose exec kafka1 kafka-console-consumer --bootstrap-server kafka1:9092,kafka2:9093,kafka3:9094 --topic first_topic --from-beginning
+docker compose exec kafka1 kafka-console-consumer --bootstrap-server kafka1:9092,kafka2:9092,kafka3:9092 --topic first_topic --from-beginning
 ```
 
 This command will consume and print all messages from the `first_topic` topic.
