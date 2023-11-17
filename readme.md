@@ -84,7 +84,7 @@ You can then type your messages into the console, and they will be sent to the `
 Here's an example command to consume data from the `first_topic` topic:
 
 ```bash
-docker compose exec kafka1 kafka-console-consumer --bootstrap-server kafka1:9092,kafka2:9092,kafka3:9092 --topic first_topic --from-beginning
+docker compose exec kafka kafka-console-consumer --bootstrap-server kafka:9092 --topic first-topic --from-beginning --group=test
 ```
 
 This command will consume and print all messages from the `first_topic` topic.
